@@ -1,0 +1,288 @@
+/******************************************
+ * 0) Chargement et animations pré-contenu
+ ******************************************/
+
+/* ======= Couleurs Globales ======= */
+:root {
+    --primary-color: #ff4b2b;
+    --secondary-color: #ff416c;
+    --bs-primary: #ff4b2b;
+  }
+  
+  /* ====== Page de chargement ====== */
+  #loading-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    background: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    z-index: 9999;
+  }
+  
+  /* Effet de particules de fond */
+  .background-effects {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+  }
+  
+  /* Logo (chargement) */
+  .logo {
+    width: 180px;
+    height: auto;
+    filter: drop-shadow(0px 0px 5px rgba(0, 0, 0, 0.2));
+    margin-bottom: 40px;
+  }
+  
+  /* Dégradé animé pour le texte */
+  .logo-gradient {
+    background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  
+  /* Texte de chargement */
+  .loading-text {
+    font-size: 2.7rem;
+    font-weight: bold;
+    color: var(--primary-color);
+    margin-top: 10px;
+    animation: blink 1.5s infinite alternate;
+  }
+  
+  /* Effet de clignotement du texte */
+  @keyframes blink {
+    0%   { opacity: 1; }
+    100% { opacity: 0.5; }
+  }
+  
+  /* Cacher le contenu avant le chargement */
+  #main-content {
+    padding: 10px;
+  }
+  
+  /******************************************
+   * 1) Mise en page générale + typographie
+   ******************************************/
+  
+  html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    /* Base font-size sur desktop */
+    font-size: 16px;
+    font-family: sans-serif;
+  }
+  
+  /* Sur mobile, on augmente la taille de la police pour avoir des éléments plus grands */
+  @media (max-width: 768px) {
+    html {
+      font-size: 20px; /* 20px au lieu de 16px => éléments plus grands sur petits écrans */
+    }
+  }
+  
+  /* Structure wrapper générale */
+  .wrapper {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+  }
+  
+  /* Le main pousse le footer en bas */
+  main {
+    flex: 1 0 auto;
+    /* Configuration pour centrer verticalement si le contenu est court */
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* Centre verticalement */
+    align-items: center;     /* Centre horizontalement */
+    padding: 1rem;
+  }
+  
+  /******************************************
+   * 2) Navbar et Menu burger
+   ******************************************/
+  
+  .navbar {
+    background: white;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    padding: 0.8rem 1rem;
+    border-radius: 20px;
+  }
+  
+  .navbar-brand {
+    font-weight: bold;
+    font-size: 1.4rem;
+    color: #333;
+  }
+  
+  /* Menu */
+  .navbar-nav .nav-item {
+    margin: 0 10px;
+  }
+  
+  .navbar-nav .nav-link {
+    color: #444;
+    font-weight: 500;
+    transition: 0.3s;
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+    font-size: 16px;
+  }
+  
+  .navbar-nav .nav-link:hover {
+    background: linear-gradient(90deg, #ff416c, #ff4b2b);
+    color: white !important;
+    transform: scale(1.05);
+  }
+  
+  /* Bouton toggler (burger) */
+  .custom-toggler {
+    border: none;
+    background: none;
+    font-size: 1.8rem;
+    color: var(--primary-color);
+    transition: 0.3s;
+  }
+  
+  .custom-toggler:hover {
+    color: var(--secondary-color);
+    transform: scale(1.1);
+  }
+  
+  /* Effet smooth du menu */
+  .collapse {
+    transition: height 0.3s ease-in-out;
+  }
+  
+  /* Icône Lucide */
+  #menu-icon {
+    width: 30px;
+    height: 30px;
+    transition: transform 0.3s ease-in-out;
+  }
+  
+  /******************************************
+   * 3) Footer
+   ******************************************/
+  
+  footer {
+    flex-shrink: 0;
+    background: linear-gradient(90deg, var(--secondary-color), var(--primary-color));
+    color: #fff;
+    text-align: center;
+    padding: 1rem;
+  }
+  
+  /******************************************
+   * 4) Sections / formulaires / boutons
+   ******************************************/
+  
+  h2 {
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 0.5rem;
+    color: #444;
+    text-align: center;
+  }
+  
+  .fs-4 {
+    font-size: 1.4rem !important;
+  }
+  
+  .form-label {
+    font-weight: 600;
+  }
+  
+  .form-control-lg {
+    margin-bottom: 1rem;
+    /* Pas de réduction de taille sur mobile */
+    font-size: 1rem;
+  }
+  
+  /* Focus sur input ou select => couleur var(--primary-color) */
+  .form-control-lg:focus,
+  .form-select-lg:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 5px var(--primary-color);
+    outline: none;
+  }
+  
+  /* Boutons */
+  .btn-lg {
+    transition: transform 0.2s ease;
+    margin-top: 0.5rem;
+    font-size: 1.5rem;
+  }
+  
+  .btn-lg:hover {
+    transform: scale(1.03);
+  }
+  
+  .btn-primary {
+    background: linear-gradient(90deg, var(--secondary-color), var(--primary-color));
+    border: none;
+  }
+  
+  /******************************************
+   * 5) Sections dynamiques
+   ******************************************/
+  
+  /* On masque toutes les sections par défaut */
+  .section {
+    display: none;
+    margin-bottom: 2rem;
+    width: 100%;
+    max-width: 600px;  /* Largeur maximale pour le contenu */
+    text-align: center;
+  }
+  
+  .section.active {
+    display: block;
+  }
+  
+  /* Centrer le formulaire à l’intérieur de la section */
+  .section form {
+    margin: 0 auto;
+    text-align: left; /* Label / Input à gauche */
+  }
+  
+  /******************************************
+   * 6) Responsivité supplémentaire
+   ******************************************/
+  
+  .container {
+    font-size: 30px;
+  }
+  
+  /* Largeur max pour la .container sur tablettes, par exemple */
+  @media (min-width: 768px) and (max-width: 1024px) {
+    .container {
+      max-width: 900px; /* Ajustez selon besoin */
+    }
+  }
+  
+  /* Sur mobile, on garde un padding latéral */
+  @media (max-width: 768px) {
+    .container {
+      padding-left: 1rem;
+      padding-right: 1rem;
+      max-width: 768px;
+    }
+  }
+  
+  /******************************************
+   * 7) Logo principal
+   ******************************************/
+  
+  #mainLogo {
+    width: 200px;
+  }
+  

@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Chargement | PDF Ascend Tool</title>
+  <meta name="google-adsense-account" content="ca-pub-2080939527739045">
+  <!-- ====== Bootstrap 5 ====== -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+  <!-- ====== Font Awesome (icônes) ====== -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+  <!-- ====== GSAP (Animations) ====== -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <!-- ====== Anime.js (Effets interactifs) ====== -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+
+  <!-- Viewport pour mobile -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2080939527739045"
+     crossorigin="anonymous"></script>
+  <style>
+    :root {
+      --primary-color: #ff4b2b;
+      --secondary-color: #ff416c;
+    }
+
+    /* ====== Page de chargement ====== */
+    #loading-screen {
+      position: fixed;
+      top: 0; 
+      left: 0;
+      width: 100%;
+      height: 100vh;
+      background: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      z-index: 9999;
+      opacity: 1; /* Pour le fade-out */
+      pointer-events: none; /* Évite interactions */
+      overflow: hidden;
+    }
+
+    /* Effet de particules de fond */
+    .background-effects {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+    }
+
+    /* Logo (chargement) */
+    .logo {
+      width: 180px;
+      height: auto;
+      filter: drop-shadow(0px 0px 5px rgba(0, 0, 0, 0.2));
+      margin-bottom: 40px;
+    }
+
+    /* Dégradé animé pour le texte */
+    .logo-gradient {
+      background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    /* Texte de chargement */
+    .loading-text {
+      font-size: 2.5rem;
+      font-weight: bold;
+      color: var(--primary-color);
+      margin-top: 10px;
+      animation: blink 1.5s infinite alternate;
+      text-align: center;
+      padding: 0 1rem; /* un peu de marge horizontale */
+    }
+
+    /* Effet de clignotement */
+    @keyframes blink {
+      0%   { opacity: 1; }
+      100% { opacity: 0.5; }
+    }
+
+    /* Responsive : adapter logo et texte sur mobile */
+    @media (max-width: 768px) {
+      .logo {
+        width: 140px;
+      }
+      .loading-text {
+        font-size: 1.8rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ====== Écran de chargement ====== -->
+<div id="loading-screen">
+  <div class="background-effects"></div>
+  <img src="{{ url_for('static', filename='logo/Fichier 3.png') }}" class="logo" alt="Logo PDF Ascend Tool">
+  <p class="loading-text">Chargement...</p>
+</div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    // Animation d'entrée du logo avec GSAP
+    gsap.from(".logo", { scale: 0, duration: 1.5, ease: "bounce.out" });
+
+    // Animation du texte "Chargement..."
+    gsap.from(".loading-text", { opacity: 0, y: -20, duration: 1.2, repeat: -1, yoyo: true });
+
+    // Création d'effets de particules avec anime.js
+    function createParticle() {
+      const particle = document.createElement("div");
+      particle.classList.add("particle");
+      document.querySelector(".background-effects").appendChild(particle);
+
+      anime({
+        targets: particle,
+        translateX: [anime.random(-100, 100), anime.random(-300, 300)],
+        translateY: [anime.random(-100, 100), anime.random(-300, 300)],
+        scale: [0.2, 1.2],
+        opacity: [1, 0],
+        easing: "easeOutQuad",
+        duration: anime.random(2000, 4000),
+        complete: () => particle.remove(),
+      });
+    }
+
+    // Génère des particules toutes les 300ms
+    setInterval(createParticle, 300);
+
+    // Après 3s, fade out puis redirection
+    setTimeout(() => {
+      gsap.to("#loading-screen", {
+        opacity: 0,
+        duration: 1,
+        onComplete: () => {
+            window.location.href = "{{ redirect_url }}";
+        }
+      });
+    }, 3000);
+  });
+</script>
+</body>
+</html>

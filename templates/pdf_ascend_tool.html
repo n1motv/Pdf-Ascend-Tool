@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <!-- Viewport pour un meilleur rendu sur mobile -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="google-adsense-account" content="ca-pub-2080939527739045">
+  <title>PDF Ascend Tool</title>
+  <!-- ====== Bootstrap 5 ====== -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+
+  <!-- ====== Font Awesome (icônes) ====== -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+
+  <!-- ====== SweetAlert2 (pour les alertes) ====== -->
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+
+  <!-- ====== GSAP (Animations) ====== -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+
+  <!-- ====== Anime.js (Effets interactifs) ====== -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+
+  <!-- Ajout de Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <link rel="stylesheet" href="{{url_for('static',filename='styles.css')}}">
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2080939527739045"
+     crossorigin="anonymous"></script>
+</head>
+<body>
+
+<div class="wrapper">
+
+  <!-- ====== NAVBAR ====== -->
+  <nav class="navbar navbar-expand-lg">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="#" onclick="showSection('fusion')">
+        <img id="mainLogo" src="{{url_for('static',filename='logo/Fichier 1.png')}}">
+      </a>
+      <!-- Bouton pour replier/déplier la navbar sur mobile -->
+      <button class="navbar-toggler custom-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarPDF" aria-controls="navbarPDF" aria-expanded="false" aria-label="Toggle navigation" onclick="toggleMenuIcon()">
+        <i id="menu-icon" data-lucide="menu"></i> <!-- Icône menu -->
+      </button>
+  
+      <!-- Menu de navigation -->
+      <div class="collapse navbar-collapse" id="navbarPDF">
+        <ul class="navbar-nav ms-auto text-center">
+          <li class="nav-item"><a class="nav-link" href="#" onclick="showSection('fusion')"><i class="fas fa-object-group"></i> Fusion</a></li>
+          <li class="nav-item"><a class="nav-link" href="#" onclick="showSection('split')"><i class="fas fa-cut"></i> Split</a></li>
+          <li class="nav-item"><a class="nav-link" href="#" onclick="showSection('compress')"><i class="fas fa-compress"></i> Compresser</a></li>
+          <li class="nav-item"><a class="nav-link" href="#" onclick="showSection('images')"><i class="fas fa-images"></i> PDF → Images</a></li>
+          <li class="nav-item"><a class="nav-link" href="#" onclick="showSection('word')"><i class="fas fa-file-word"></i> PDF → Word</a></li>
+          <li class="nav-item"><a class="nav-link" href="#" onclick="showSection('images_to_pdf')"><i class="fas fa-file-image"></i> Images → PDF</a></li>
+          <li class="nav-item"><a class="nav-link" href="#" onclick="showSection('word_to_pdf')"><i class="fas fa-file-word"></i> Word → PDF</a></li>          
+          <li class="nav-item"><a class="nav-link" href="#" onclick="showSection('rotate')"><i class="fas fa-undo-alt"></i> Rotation</a></li>
+          <li class="nav-item"><a class="nav-link" href="#" onclick="showSection('numbers')"><i class="fas fa-list-ol"></i> Numéros</a></li>
+          <li class="nav-item"><a class="nav-link" href="#" onclick="showSection('repair')"><i class="fas fa-tools"></i> Réparer</a></li>
+          <li class="nav-item"><a class="nav-link" href="#" onclick="showSection('unlock')"><i class="fas fa-lock-open"></i> Déverrouiller</a></li>
+          <li class="nav-item"><a class="nav-link" href="#" onclick="showSection('protect')"><i class="fas fa-shield-alt"></i> Protéger</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+  <!-- ====== Contenu Principal ====== -->
+  <div id="main-content">
+    <h1 class="text-center mt-5 logo-gradient fw-bold">Bienvenue sur PDF Ascend Tool</h1>
+    <p class="text-center">Votre outil tout-en-un pour manipuler vos fichiers PDF.</p>
+  </div>
+
+  <!-- ====== CONTENU PRINCIPAL ====== -->
+  <main class="container">
+    <div class="row gy-4 justify-content-center">
+      <div class="col-12 d-flex flex-column align-items-center">
+        
+        <!-- Script pour afficher les flash messages via SweetAlert2 -->
+        <script>
+          let flashMessages = [];
+          {% with messages = get_flashed_messages() %}
+          {% if messages %}
+            flashMessages = flashMessages.concat({{ messages|tojson }});
+          {% endif %}
+          {% endwith %}
+          
+          if(flashMessages.length > 0) {
+            flashMessages.forEach(msg => {
+              Swal.fire({
+                icon: 'info', // ou 'success', 'error', 'warning'
+                title: 'Message',
+                text: msg,
+                timer: 3000,
+                showConfirmButton: false
+              });
+            });
+          }
+        </script>
+
+        <!-- ================= Sections ================= -->
+
+        <!-- Fusion PDF -->
+        <div id="fusion" class="section">
+          <h1><i class="fas fa-object-group me-2"></i>Fusion de PDF</h1>
+          <br>
+          <form action="{{ url_for('route_merge') }}" method="POST" enctype="multipart/form-data">
+            <label class="form-label">Sélectionner plusieurs fichiers PDF :</label>
+            <input class="form-control form-control-lg" type="file" name="merge_files" multiple>
+            <button class="btn btn-primary btn-lg w-100" type="submit">Fusionner</button>
+          </form>
+        </div>
+
+        <!-- Split PDF -->
+        <div id="split" class="section">
+          <h1><i class="fas fa-cut me-2"></i>Split de PDF</h1>
+          <br>
+          <form action="{{ url_for('route_split') }}" method="POST" enctype="multipart/form-data">
+            <label class="form-label">Sélectionner le fichier PDF :</label>
+            <input class="form-control form-control-lg" type="file" name="split_file">
+
+            <label class="form-label">Nombre de pages par split (optionnel) :</label>
+            <input class="form-control form-control-lg" type="number" name="pages_per_split" placeholder="ex: 2">
+
+            <label class="form-label">Range de pages (optionnel, ex: 1-3) :</label>
+            <input class="form-control form-control-lg" type="text" name="page_range" placeholder="ex: 1-3">
+
+            <button class="btn btn-primary btn-lg w-100" type="submit">Split</button>
+          </form>
+        </div>
+
+        <!-- Compresser PDF -->
+        <div id="compress" class="section">
+          <h1><i class="fas fa-compress me-2"></i>Compresser un PDF</h1>
+          <br>
+          <!-- Formulaire de compression PDF -->
+          <form action="{{ url_for('route_compress') }}" method="post" enctype="multipart/form-data">
+            <label class="form-label">Sélectionner un fichier PDF :</label>
+            <input class="form-control form-control-lg" type="file" name="compress_file" required>
+        
+            <label class="form-label">Niveau de compression :</label>
+            <select class="form-select form-select-lg" name="compression_quality" required>
+                <option value="low">Faible (compression max, qualité basse)</option>
+                <option value="medium" selected>Moyenne (compression équilibrée, recommandé)</option>
+                <option value="high">Haute (qualité élevée, compression faible)</option>
+            </select>
+        
+            <button class="btn btn-primary btn-lg w-100 mt-3" type="submit">Compresser</button>
+        </form>
+        
+        </div>
+
+
+        <!-- PDF -> Images -->
+        <div id="images" class="section">
+          <h1><i class="fas fa-images me-2"></i>PDF vers Images</h1>
+          <br>
+          <form action="{{ url_for('route_pdf_to_images') }}" method="POST" enctype="multipart/form-data">
+            <label class="form-label">Sélectionner le fichier PDF :</label>
+            <input class="form-control form-control-lg" type="file" name="images_file">
+            <button class="btn btn-primary btn-lg w-100" type="submit">Convertir</button>
+          </form>
+        </div>
+
+        <!-- PDF -> Word -->
+        <div id="word" class="section">
+          <h1><i class="fas fa-file-word me-2"></i>PDF vers Word</h1>
+          <br>
+          <form action="{{ url_for('route_pdf_to_word') }}" method="POST" enctype="multipart/form-data">
+            <label class="form-label">Sélectionner le fichier PDF :</label>
+            <input class="form-control form-control-lg" type="file" name="word_file">
+            <button class="btn btn-primary btn-lg w-100" type="submit">Convertir</button>
+          </form>
+        </div>
+
+        <!-- Rotation PDF -->
+        <div id="rotate" class="section">
+          <h1><i class="fas fa-undo-alt me-2"></i>Rotation d'un PDF</h1>
+          <br>
+          <form action="{{ url_for('route_rotate') }}" method="POST" enctype="multipart/form-data">
+            <label class="form-label">Sélectionner le fichier PDF :</label>
+            <input class="form-control form-control-lg" type="file" name="rotate_file">
+
+            <label class="form-label">Angle (en degrés) :</label>
+            <input class="form-control form-control-lg" type="number" name="angle" placeholder="ex: 90">
+
+            <button class="btn btn-primary btn-lg w-100" type="submit">Pivoter</button>
+          </form>
+        </div>
+
+        <!-- Numéroter les pages -->
+        <div id="numbers" class="section">
+          <h1><i class="fas fa-list-ol me-2"></i>Numéroter les pages</h1>
+          <br>
+          <form action="{{ url_for('route_add_page_numbers') }}" method="POST" enctype="multipart/form-data">
+            <label class="form-label">Sélectionner le fichier PDF :</label>
+            <input class="form-control form-control-lg" type="file" name="numbers_file">
+            <button class="btn btn-primary btn-lg w-100" type="submit">Ajouter numéros</button>
+          </form>
+        </div>
+
+        <!-- Réparer un PDF -->
+        <div id="repair" class="section">
+          <h1><i class="fas fa-tools me-2"></i>Réparer un PDF</h1>
+          <br>
+          <form action="{{ url_for('route_repair') }}" method="POST" enctype="multipart/form-data">
+            <label class="form-label">Sélectionner le fichier PDF :</label>
+            <input class="form-control form-control-lg" type="file" name="repair_file">
+            <button class="btn btn-primary btn-lg w-100" type="submit">Réparer</button>
+          </form>
+        </div>
+
+        <!-- Déverrouiller un PDF -->
+        <div id="unlock" class="section">
+          <h1><i class="fas fa-lock-open me-2"></i>Déverrouiller un PDF</h1>
+          <br>
+          <form action="{{ url_for('route_unlock') }}" method="POST" enctype="multipart/form-data">
+            <label class="form-label">Sélectionner le fichier PDF :</label>
+            <input class="form-control form-control-lg" type="file" name="unlock_file">
+
+            <label class="form-label">Mot de passe :</label>
+            <input class="form-control form-control-lg" type="password" name="unlock_password">
+
+            <button class="btn btn-primary btn-lg w-100" type="submit">Déverrouiller</button>
+          </form>
+        </div>
+
+        <!-- Protéger un PDF -->
+        <div id="protect" class="section">
+          <h1><i class="fas fa-shield-alt me-2"></i>Protéger un PDF</h1>
+          <br>
+          <form action="{{ url_for('route_protect') }}" method="POST" enctype="multipart/form-data">
+            <label class="form-label">Sélectionner le fichier PDF :</label>
+            <input class="form-control form-control-lg" type="file" name="protect_file">
+
+            <label class="form-label">Mot de passe :</label>
+            <input class="form-control form-control-lg" type="password" name="protect_password">
+
+            <button class="btn btn-primary btn-lg w-100" type="submit">Protéger</button>
+          </form>
+        </div>
+        <!-- Images vers PDF -->
+        <div id="images_to_pdf" class="section">
+          <h1><i class="fas fa-file-image me-2"></i>Images vers PDF</h1>
+          <br>
+          <form action="{{ url_for('route_images_to_pdf') }}" method="POST" enctype="multipart/form-data">
+            <label class="form-label">Sélectionner des images :</label>
+            <input class="form-control form-control-lg" type="file" name="images_files" multiple>
+            <button class="btn btn-primary btn-lg w-100" type="submit">Convertir</button>
+          </form>
+        </div>
+
+        <!-- Word vers PDF -->
+        <div id="word_to_pdf" class="section">
+          <h1><i class="fas fa-file-word me-2"></i>Word vers PDF</h1>
+          <br>
+          <form action="{{ url_for('route_word_to_pdf') }}" method="POST" enctype="multipart/form-data">
+            <label class="form-label">Sélectionner un fichier Word :</label>
+            <input class="form-control form-control-lg" type="file" name="word_file">
+            <button class="btn btn-primary btn-lg w-100" type="submit">Convertir</button>
+          </form>
+        </div>
+
+      </div> <!-- /col -->
+    </div> <!-- /row -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2080939527739045"
+         crossorigin="anonymous"></script>
+    <!-- Hortizontale -->
+    <ins class="adsbygoogle"
+         style="display:block"
+         data-ad-client="ca-pub-2080939527739045"
+         data-ad-slot="4394489277"
+         data-ad-format="auto"
+         data-full-width-responsive="true"></ins>
+    <script>
+         (adsbygoogle = window.adsbygoogle || []).push({});
+    </script>
+  </main>
+  <!-- ====== FOOTER ====== -->
+  <footer>
+    <p class="mb-0">&copy; PDF Ascend Tool</p>
+  </footer>
+</div> <!-- /.wrapper -->
+
+<!-- ====== BOOTSTRAP JS ====== -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="../static/script.js"></script>
+</body>
+</html>
