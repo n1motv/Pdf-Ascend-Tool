@@ -1,6 +1,7 @@
 import os
 import io
 import subprocess
+import shutil
 
 from flask import Flask, render_template, request, redirect, url_for, send_file, flash
 from werkzeug.utils import secure_filename
@@ -21,7 +22,6 @@ from reportlab.lib.pagesizes import A4
 
 from docx import Document
 from reportlab.lib.utils import simpleSplit
-
 
 
 # ================
@@ -99,12 +99,7 @@ def split_pdf(input_file, output_dir, pages_per_split=None, page_range=None):
                 pdf_writer.write(out)
             output_files.append(output_filename)
         return output_files
-import os
-import subprocess
-import fitz  # PyMuPDF
-from PIL import Image
-import io
-import shutil
+
 
 # Ajouter Ghostscript au PATH si nécessaire
 gs_path = r"C:\Program Files\gs\gs10.04.0\bin"
