@@ -4,8 +4,8 @@ PDF Ascend Tool is a **Flask-based** web application that provides **various PDF
 - 📑 **Merge multiple PDFs**
 - ✂️ **Split PDFs**
 - 📉 **Compress PDFs (including images)**
-- 📸 **Convert PDFs to Images**
-- 📝 **Convert PDFs to Word**
+- 📸 **Convert PDFs to Images / Vice versa**
+- 📝 **Convert PDFs to Word / Vice versa**
 - 🔄 **Rotate PDFs**
 - 🔢 **Add Page Numbers**
 - 🔧 **Repair PDFs**
